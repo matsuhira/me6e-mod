@@ -1,0 +1,301 @@
+ME6E コマンドマニュアル
+
+●ME6E-ARP代理応答設定コマンド
+
+名前
+	arp_proxy - ARP代理応答の設定
+
+書式
+	arp_proxy -s <ipv4addr> <MACaddr> <planeid>
+	arp_proxy -d <ipv4addr> <planeid>
+
+説明
+	ME6EでARP代理応答する宛先アドレスの設定に使用する。
+	引数が与えられないと、ARP代理応答設定コマンドは
+	現在設定されているARP代理応答の設定一覧を表示する。
+
+オプション
+	-s
+		指定したアドレスをテーブルに追加する。
+	-d
+		指定したアドレスをテーブルから削除する。
+
+使用例
+	○宛先アドレスをテーブルに追加する
+	> arp_proxy -s 192.168.1.1 00:26:2D:06:B7:B4 1
+
+	○宛先アドレスをテーブルから削除する
+	> arp_proxy -d 192.168.1.1 1
+
+	○設定一覧を表示する
+	> arp_proxy
+
+	<出力例>
+	   PlaneID IPv4addr        MACaddr
+	---------- --------------- -----------------
+	         1 192.168.1.1     00:26:2D:06:B7:B4
+	         2 192.168.1.2     00:26:2d:06:b8:30
+
+
+●ME6E-Backbone側 NDP代理応答設定コマンド
+
+名前
+	ndp_proxy backbone - Backbone側のNDP代理応答の設定
+
+書式
+	ndp_proxy backbone -s <MACaddr>
+	ndp_proxy backbone -d <MACaddr>
+
+説明
+	ME6EでBackbone側にNDP代理応答する宛先アドレスの設定に使用する。
+	引数が与えられないと、NDP代理応答設定コマンドは
+	現在設定されているNDP代理応答の設定一覧を表示する。
+
+オプション
+	-s
+		指定した宛先アドレスをテーブルに追加する。
+	-d
+		指定したアドレスをテーブルから削除する。
+
+使用例
+	○宛先アドレスをテーブルに追加する
+	> ndp_proxy backbone -s 00:26:2D:06:B7:B4
+
+	○宛先アドレスをテーブルから削除する
+	> ndp_proxy backbone -d 00:26:2D:06:B7:B4
+
+	○設定一覧を表示する
+	> ndp_proxy backbone
+
+	<出力例>
+	MACaddr
+	-----------------
+	00:26:2D:06:B7:B4
+	00:26:2d:06:b8:30
+
+●ME6E-Stub側 NDP代理応答設定コマンド
+
+名前
+	ndp_proxy stub - Stub側NDP代理応答の設定
+
+書式
+	ndp_proxy stub -s <ipv6addr> <MACaddr> <planeid>
+	ndp_proxy stub -d <ipv6addr> <planeid>
+
+説明
+	ME6EでStub側にNDP代理応答する宛先アドレスの設定に使用する。
+	引数が与えられないと、Stub側NDP代理応答設定コマンドは
+	現在設定されているStub側NDP代理応答の設定一覧を表示する。
+
+オプション
+	-s
+		指定した宛先アドレスをテーブルに追加する。
+	-d
+		指定したアドレスをテーブルから削除する。
+
+使用例
+	○宛先アドレスをテーブルに追加する
+	> ndp_proxy stub -s 2001:db8:cafe::1 00:26:2D:06:B7:B4 1
+
+	○宛先アドレスをテーブルから削除する
+	> ndp_proxy stub -d 2001:db8:cafe::1 1
+
+	○設定一覧を表示する
+	> ndp_proxy stub
+
+	<出力例>
+	   PlaneID MACaddr           IPv6addr
+	---------- ----------------- ---------------------------------------
+                 1 00:26:2D:06:B7:B4 2001:db8:cafe::1
+                 2 00:26:2d:06:b8:30 2001:db8:cafe::2
+
+●ME6E-PR(Prefix Resolusion)設定コマンド
+
+名前
+	pr - ME6E-PRの設定
+
+書式
+	pr -s pr-prefix <macaddr> <sae6t-prefix and planeid> <planeid>
+	pr -s default <sae6t-prefix and planeid>
+	pr -d pr-prefix <macaddr> <planeid>
+	pr -d default
+	pr -f <filepath>
+
+説明
+	ME6E-PRでは、宛先MACアドレス毎に設定されたME6Eのprefixを使用し
+	てIPv6パケットを生成する。本コマンドではMACアドレスに紐づける
+	ME6Eのprefixを設定する。
+	引数が与えられないと、ME6E-PR設定コマンドは
+	現在設定されているME6E-PRの設定一覧を表示する。
+
+オプション
+	-s pr-prefix
+		指定したMACアドレスのSAE6T prefixをテーブルに追加する。
+	-s default
+		テーブルに登録されていないMACアドレスを受信したときに付与
+		するSAE6T prefixを設定する。
+	-d pr-prefix
+		指定したMACアドレスのSAE6T prefixを削除する。
+	-d default
+		デフォルトprefixを削除する。
+	-f
+		設定ファイルに記載されている設定を一括設定する。
+
+使用例
+	○宛先アドレスをテーブルに追加する。
+	  MACアドレス「00:26:2d:06:b8:30」の宛先にSAE6T prefix
+	  「2001:db8::」、Plane ID「6553601」を設定する場合。
+	> pr -s pr-prefix 00:26:2d:06:b8:30 2001:db8:0:64:1:: 6553601
+
+	○宛先アドレスをテーブルから削除する。
+	  MACアドレス「00:26:2d:06:b8:30」の宛先SAE6T prefix
+	  「2001:db8::」、Plane ID「6553601」を削除する場合。
+	> pr -d pr-prefix 00:26:2d:06:b8:30 6553601
+
+	○設定一覧を表示する
+	> pr
+
+	<出力例>
+		   PlaneID MACaddr           SAE6T-PR Prefix
+		---------- ----------------- ---------------------------------------
+		   6553601 00:26:2d:06:b8:30 2001:db8:0:64:1:26:2d06:b830
+
+●ME6Eデバイス追加設定コマンド
+
+名前
+	dev - ME6Eデバイスの追加
+
+書式
+	dev -s
+
+説明
+	ME6EをMultiPlane構成にする場合に使用する。
+	MultiPlane構成にする場合はplane毎に異なる
+	ME6Eデバイスを作成、ブリッジの設定をする。
+	デバイス名はme6ex(xは数値)で作成され、
+	xの値はデバイスの追加ごとにインクリメントされる。
+
+使用例
+	○ME6Eデバイスを追加する
+	> dev -s
+
+●ME6E統計情報取得コマンド
+
+名前
+        statistics - ME6E統計情報取得
+
+書式
+        statistics <device name>
+
+説明
+	ME6Eデバイスのパケット統計情報を取得する
+
+使用例
+        ○ME6Eデバイスの統計情報を取得する
+        > statistics me6e0
+
+●設定保存読込コマンド
+
+名前
+	config - ME6Eの設定保存読込
+
+書式
+	config load <filepath>
+
+説明
+	ME6Eの設定をファイルから読み込み、一括で設定する。
+
+オプション
+	load
+		ファイルに記載された設定をME6Eに適用する。
+
+●IPsecモード設定コマンド
+
+名前
+        ipsec - ME6EデバイスのMTUをIPsecヘッダを考慮したパケット長に変更する
+
+書式
+        ipsec flag
+
+説明
+        ME6E backboneをIPsec構成にする場合に必ず実行する。
+
+使用例
+        ○IPsecモードをON/OFFする
+        > ipsec flag
+
+	○設定状況を表示
+	> ipsec
+
+        <出力例>
+		IPsec ON
+
+●インタフェース Plane ID 設定コマンド
+
+名前
+        iif -	ME6Eデバイスと同じブリッジグループにあるインタフェースの
+		Plane ID を設定する
+
+書式
+	iif -s <if_index> <planeid>
+	iif -d <if_index>
+
+説明
+        ME6Eデバイスと同じブリッジグループにあるインタフェースの
+	Plane ID を設定する。
+
+使用例
+        ○Plane ID を設定する
+        > iif -s 2 1
+
+        ○Plane ID の設定を削除する
+        > iif -d 2
+
+	○インタフェース番号とPlane ID設定状況を表示
+
+        <出力例>
+                       IIF PlaneID
+		---------- ----------
+		         2          1
+		         4          2
+
+		index    name
+		-------- ----------------
+		1        lo
+		2        enp96s5
+		3        enp0s25
+		4        enp32s0
+		5        enp0s29f7u5
+		6        virbr0
+		7        virbr0-nic
+		9        me6e0
+
+●PMTU 設定コマンド
+
+名前
+	pmtu -	宛先経路毎にPMTUを設定する。
+
+書式
+	pmtu -s <ipv6addr> <MTU>
+	pmtu -d <ipv6addr>
+	pmtu -t <time>
+
+説明
+	経路毎のMTUを設定する。
+
+使用例
+	○指定経路のMTUを設定する
+	> pmtu -s 2001:db8:2:0:1:1234:1234:1234 1300
+
+	○指定経路のMTUを削除する
+	> pmtu -d 2001:db8:2:0:1:1234:1234:1234
+
+	○インタフェース番号とPlane ID設定状況を表示
+
+	<出力例>
+	me6e >pmtu
+	Address                                  MTU   Life(sec) : initial value = 600
+	---------------------------------------  ----  --------
+	2001:db8:2:0:1:1234:1234:1234            1300  static
+	2001:db8:2:0:1:2222:3333:4444            1406  141
+	Total entries : 2
