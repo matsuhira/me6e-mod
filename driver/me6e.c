@@ -26,7 +26,7 @@
 #include "me6e.h"
 
 MODULE_DESCRIPTION("Stateless Automatic Ethernet over IPv6 tunneling device");
-MODULE_LICENSE("Proprietary");
+MODULE_LICENSE("GPL v2");
 
 static int me6_pmtu_set(struct in6_addr, __be32, uint32_t);
 
